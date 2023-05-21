@@ -37,6 +37,21 @@ async function run() {
             res.send(result);
         })
 
+
+        // search functionality
+        app.get("/toySearchByName/:text", async (req, res) => {
+            const searchText = req.params.text;
+            const result = await toysCollection
+                .find({
+                    $or: [
+                        { ToyName: { $regex: searchText, $options: "i" } }
+
+                    ],
+                })
+                .toArray();
+            res.send(result);
+        });
+
         // delete functionality
 
         app.delete('/toys/:id', async (req, res) => {
