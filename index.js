@@ -87,20 +87,20 @@ async function run() {
 
         app.get('/toys', async (req, res) => {
             const cursor = toysCollection.find()
-            const result = await cursor.toArray();
+            const result = await cursor.limit(20).toArray();
             res.send(result);
         })
 
 
-        app.get('/toys', async (req, res) => {
-            let query = {};
-            const result = await toysCollection.find(query).toArray();
-            res.send(result)
-        })
+        // app.get('/toys', async (req, res) => {
+        //     const limit = 20;
+        //     const result = await toysCollection.find(query).limit(limit).toArray();
+        //     res.send(result)
+        // })
 
         app.get('/my-toys/:email', async (req, res) => {
             let email = { email: req.params.email };
-            const result = await toysCollection.find(email).toArray();
+            const result = await toysCollection.find(email).limit(20).toArray();
             res.send(result)
         })
 
