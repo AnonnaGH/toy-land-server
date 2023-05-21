@@ -32,6 +32,7 @@ async function run() {
 
         app.post('/toys', async (req, res) => {
             const toy = req.body;
+            toy.createdAt = new Date();
             console.log('new toy', toy);
             const result = await toysCollection.insertOne(toy);
             res.send(result);
@@ -87,7 +88,7 @@ async function run() {
 
         app.get('/toys', async (req, res) => {
             const cursor = toysCollection.find()
-            const result = await cursor.limit(20).toArray();
+            const result = await cursor.limit(20).sort({ createdAt: -1 }).toArray();
             res.send(result);
         })
 
@@ -100,7 +101,7 @@ async function run() {
 
         app.get('/my-toys/:email', async (req, res) => {
             let email = { email: req.params.email };
-            const result = await toysCollection.find(email).limit(20).toArray();
+            const result = await toysCollection.find(email).limit(20).sort({ createdAt: -1 }).toArray();
             res.send(result)
         })
 
@@ -108,11 +109,11 @@ async function run() {
             console.log(req.params.text)
             if (req.params.text == "regular" || req.params.text == "sports" || req.params.text == "truck") {
                 //  const cursor =toysCollection.find({SubCategory: req.params.text})
-                const result = await toysCollection.find({ SubCategory: req.params.text }).toArray();
+                const result = await toysCollection.find({ SubCategory: req.params.text }).sort({ createdAt: -1 }).toArray();
                 return res.send(result);
             } else {
                 // const cursor =toysCollection.find({})
-                const result = await toysCollection.find({}).toArray();
+                const result = await toysCollection.find({}).sort({ createdAt: -1 }).toArray();
                 res.send(result);
             }
 
